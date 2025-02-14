@@ -1,15 +1,21 @@
 <html>
-    <head>
-        <title> Loot Splitter </title>
-        <link href="style.css" rel="stylesheet">
-    </head>
-    <body onload="OnLoad()">
-        <h1> Hello </h1>
-        <button> Add Player </button>
-        <button> Add Column </button>
 
-        <script src="logic.js">
+<head>
+    <title> Loot Splitter </title>
+    <link href="style.css" rel="stylesheet">
+</head>
 
-        </script>
-    </body>
+<body onload="OnLoad()">
+    <h1> Hello </h1>
+    <button onclick="AddPlayer()"> Add Player </button>
+    <button onclick="AddLootCount()"> Add Column </button>
+    <script src="logic.js"> </script>
+
+    <table id="table">
+        <tr id ="tableheader">
+            <th> Name </th>
+        </tr>
+    </table>
+</body>
+
 </html>

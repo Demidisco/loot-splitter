@@ -1,4 +1,36 @@
-html, body {
-    background-color: black;
+:root {
+    --light-blue: #BFD7EA;
+    --medium-blue: #91AEC1;
+    --dark-blue: #508CA4;
+    --dark-red: #4C061D;
+    --dark-purple: #44344F;
+}
+
+body {
+    background-color: var(--light-blue);
+    /* Light blue as background */
+    color: var(--dark-purple);
+    /* Dark purple text */
+}
+
+h1 {
+    color: var(--medium-blue);
+    /* Medium blue for the heading */
+}
+
+button {
+    background-color: var(--dark-red);
+    /* Dark red button */
     color: white;
+    /* White text on button */
+}
+
+button:hover {
+    background-color: var(--dark-blue);
+    /* Dark blue when hovering */
+}
+
+.deletebtn {
+    width: 20px;
+    height: 20px;
 }
