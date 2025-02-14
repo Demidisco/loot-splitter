@@ -1,14 +1,13 @@
 function OnLoad() {
-    console.log("Hello world!");
     tableElement = document.getElementById("table");
     tableHeader = document.getElementById("tableheader");
+    results = document.getElementById("results");
+    AddPlayer()
+    AddPlayer()
+    AddPlayer()
     AddPlayer()
     AddPlayer()
     AddLootCount()
-    AddPlayer()
-    AddPlayer()
-    AddLootCount()
-    AddPlayer()
 }
 
 var tableHeader
@@ -18,6 +17,7 @@ var playerCount = 0
 var lootCount = 0
 var existingPlayerIds = []
 var existingLootIds = []
+var results
 
 function DeletePlayer(playernumber) {
 
@@ -40,13 +40,14 @@ function GetPlayerElement() {
     newPlayerDelete.classList.add("deletebtn")
     newPlayerDelete.setAttribute("src", "https://cdn-icons-png.flaticon.com/512/3161/3161358.png")
     newPlayerDelete.addEventListener("click", () => DeletePlayer(playerCount))
+
     var newPlayerDeleteColumn = document.createElement("td")
     newPlayerDeleteColumn.appendChild(newPlayer)
     newPlayerDeleteColumn.appendChild(newPlayerDelete)
     newElement.appendChild(newPlayerDeleteColumn)
 
     existingLootIds.forEach(function (value) {
-        newElement.appendChild(CreateLootValueInput("Loot"+value, "Loot"+value))
+        newElement.appendChild(CreateLootValueInput("Loot"+value, "LootCount"+value, lootCount))
     })
 
     return newElement
@@ -56,12 +57,12 @@ function AddLootCount() {
     var allPlayerElements = GetAllPlayerRows();
     if (allPlayerElements.length != 0) {
         Array.from(allPlayerElements).forEach(item => {
-            var newColumn = CreateLootValueInput("Loot" + lootCount, "Loot" + lootCount)
+            var newColumn = CreateLootValueInput("Loot" + lootCount, "LootCount" + lootCount, lootCount)
             item.appendChild(newColumn)
         });
         tableHeader.appendChild(CreateLootValueHeader("Loot" + lootCount))
-        lootCount++
         existingLootIds.push(lootCount)
+        lootCount++
     }
 }
 
@@ -70,13 +71,15 @@ function GetAllPlayerRows() {
     return AllPlayers;
 }
 
-function CreateLootValueInput(tdClassName, textboxClassName) {
+function CreateLootValueInput(tdClassName, textboxClassName, index) {
     var newPlayerLootColumn = document.createElement("td")
     newPlayerLootColumn.classList.add(tdClassName)
 
     var newPlayerLootColumnTextBox = document.createElement("input")
-    newPlayerLootColumnTextBox.setAttribute("type", "text")
+    newPlayerLootColumnTextBox.setAttribute("type", "number")
+    newPlayerLootColumnTextBox.setAttribute("value", 0)
     newPlayerLootColumnTextBox.classList.add(textboxClassName)
+    newPlayerLootColumnTextBox.addEventListener("input", UpdateLootCount)
     
     newPlayerLootColumn.appendChild(newPlayerLootColumnTextBox)
 
@@ -96,4 +99,40 @@ function CreateLootValueHeader(tdClassName) {
 
 function RemoveLootCount(lootnumber) {
 
+}
+
+function GetAllLootCountElements(index) {
+    return document.getElementsByClassName(index)
+}
+
+function GetAllLootTotal(index) {
+    var alllootcounts = GetAllLootCountElements(index)
+    var totalLoot = 0
+    Array.from(alllootcounts).forEach(item => {
+        totalLoot += parseInt(item.value) 
+    });
+    var average = (totalLoot / alllootcounts.length)
+    results.innerHTML = "Average: " + average + "sp<br/>"
+    results.innerHTML += "Total: " + totalLoot + "sp<br/>"
+
+    Array.from(alllootcounts).forEach(item => {
+        var amount = parseInt(item.value) 
+        var moneyOwed = amount - average;
+        if (moneyOwed < 0)
+            results.innerHTML += "Player is owed " + (moneyOwed * -1)
+        else
+            results.innerHTML += "Player must pay " + moneyOwed
+        results.innerHTML += "sp<br>"
+    });
+
+    return totalLoot
+}
+
+function CountLootTotal(index) {
+    return GetAllLootTotal(index)
+}
+
+function UpdateLootCount(e) {
+    var targetIndex= e.target.classList[0];
+    CountLootTotal(targetIndex);
 }
